@@ -20,8 +20,8 @@ import java.io.File;
 import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.clijToITK;
 import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.itkToCLIJ;
 
-@Plugin(type = CLIJMacroPlugin.class, name = "CLIJx_simpleITKConnectedComponentsLabeling")
-public class SimpleITKConnectedComponentsLabeling extends AbstractCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
+@Plugin(type = CLIJMacroPlugin.class, name = "CLIJx_simpleITKConnectedComponent")
+public class SimpleITKConnectedComponent extends AbstractCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
 {
     @Override
     public String getParameterHelpText() {
@@ -30,11 +30,11 @@ public class SimpleITKConnectedComponentsLabeling extends AbstractCLIJ2Plugin im
 
     @Override
     public boolean executeCL() {
-        boolean result = simpleItkConnectedComponentsLabeling(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]));
+        boolean result = simpleITKConnectedComponent(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]));
         return result;
     }
 
-    public static synchronized boolean simpleItkConnectedComponentsLabeling(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output) {
+    public static synchronized boolean simpleITKConnectedComponent(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output) {
 
         // convert to ITK
         Image itk_input = clijToITK(clij2, input);
