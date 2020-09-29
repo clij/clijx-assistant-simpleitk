@@ -11,6 +11,7 @@ import net.haesleinhuepf.clij2.AbstractCLIJ2Plugin;
 import net.haesleinhuepf.clij2.CLIJ2;
 import net.haesleinhuepf.clij2.utilities.IsCategorized;
 import org.itk.simple.Image;
+import org.itk.simple.PixelIDValueEnum;
 import org.itk.simple.SimpleITK;
 import org.scijava.plugin.Plugin;
 
@@ -42,7 +43,7 @@ public class SimpleITKConnectedComponentsLabeling extends AbstractCLIJ2Plugin im
         Image itk_output = SimpleITK.connectedComponent(itk_input);
 
         // push result back
-        ClearCLBuffer result = itkToCLIJ(clij2, itk_output);
+        ClearCLBuffer result = itkToCLIJ(clij2, SimpleITK.cast(itk_output, PixelIDValueEnum.sitkFloat32));
 
         // save it in the right place
         clij2.copy(result, output);
