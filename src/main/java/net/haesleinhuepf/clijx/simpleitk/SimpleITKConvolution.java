@@ -67,8 +67,7 @@ public class SimpleITKConvolution extends AbstractCLIJ2Plugin implements CLIJMac
 
     @Override
     public String getDescription() {
-        return "Generate SimpleITKs Danielsson distance map from a binary image.\n\n" +
-                "Compared to SimpleITK, the image is binary inverted before the map is generated to make the operation similar to ImageJs implementation.";
+        return "Convolve an image with a kernel image using SimpleITK.";
     }
 
     @Override
@@ -78,6 +77,6 @@ public class SimpleITKConvolution extends AbstractCLIJ2Plugin implements CLIJMac
 
     @Override
     public String getCategories() {
-        return "Binary,Filter";
+        return "Filter";
     }
 }
