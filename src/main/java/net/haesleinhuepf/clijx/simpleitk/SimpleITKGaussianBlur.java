@@ -24,22 +24,22 @@ public class SimpleITKGaussianBlur extends AbstractCLIJ2Plugin implements CLIJMa
 {
     @Override
     public String getParameterHelpText() {
-        return "Image input, ByRef Image destination, Number sigma";
+        return "Image input, ByRef Image destination, Number sigma_x, Number sigma_y, Number sigma_z";
     }
 
     @Override
     public boolean executeCL() {
-        boolean result = simpleItkGaussianBlur(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), asFloat(args[2]));
+        boolean result = simpleItkGaussianBlur(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), asFloat(args[2]), asFloat(args[2]), asFloat(args[2]));
         return result;
     }
 
-    public static boolean simpleItkGaussianBlur(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output, Float sigma) {
+    public static boolean simpleItkGaussianBlur(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output, Float sigma_x, Float sigma_y, Float sigma_z) {
 
         // convert to ITK
         Image itk_input = clijToITK(clij2, input);
 
         // apply SimpleITK Gaussian Blur
-        Image itk_output = SimpleITK.discreteGaussian(itk_input, sigma);
+        Image itk_output = SimpleITK.discreteGaussian(itk_input, CLIJSimpleITKUtilities.packRadii(sigma_x, sigma_y, sigma_z, (int)input.getDimension()));
 
         // push result back
         ClearCLBuffer result = itkToCLIJ(clij2, itk_output);

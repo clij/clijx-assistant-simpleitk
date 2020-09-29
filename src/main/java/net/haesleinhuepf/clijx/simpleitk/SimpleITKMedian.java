@@ -42,7 +42,7 @@ public class SimpleITKMedian extends AbstractCLIJ2Plugin implements CLIJMacroPlu
             radii[2] = radius_z;
         }
 
-        // apply SimpleITK Gaussian Blur
+        // apply SimpleITK Median
         Image itk_output = SimpleITK.median(itk_input, new VectorUInt32(radii));
 
         // push result back
