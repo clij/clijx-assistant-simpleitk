@@ -30,7 +30,7 @@ public class SimpleITKMedian extends AbstractCLIJ2Plugin implements CLIJMacroPlu
         return result;
     }
 
-    public static boolean simpleITKMedian(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output, Integer radius_x, Integer radius_y, Integer radius_z) {
+    public static synchronized boolean simpleITKMedian(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output, Integer radius_x, Integer radius_y, Integer radius_z) {
 
         // convert to ITK
         Image itk_input = clijToITK(clij2, input);

@@ -30,7 +30,7 @@ public class SimpleITKYenThreshold extends AbstractCLIJ2Plugin implements CLIJMa
         return result;
     }
 
-    public static boolean simpleITKYenThreshold(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output) {
+    public static synchronized boolean simpleITKYenThreshold(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output) {
 
         // convert to ITK
         Image itk_input = clijToITK(clij2, input);

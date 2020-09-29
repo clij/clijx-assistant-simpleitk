@@ -33,7 +33,7 @@ public class SimpleITKGaussianBlur extends AbstractCLIJ2Plugin implements CLIJMa
         return result;
     }
 
-    public static boolean simpleItkGaussianBlur(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output, Float sigma_x, Float sigma_y, Float sigma_z) {
+    public static synchronized boolean simpleItkGaussianBlur(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output, Float sigma_x, Float sigma_y, Float sigma_z) {
 
         // convert to ITK
         Image itk_input = clijToITK(clij2, input);

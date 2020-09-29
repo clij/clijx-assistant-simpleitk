@@ -29,7 +29,7 @@ public class SimpleITKConvolution extends AbstractCLIJ2Plugin implements CLIJMac
         return result;
     }
 
-    public static boolean simpleITKConvolution(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer input_kernel, ClearCLBuffer output) {
+    public static synchronized boolean simpleITKConvolution(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer input_kernel, ClearCLBuffer output) {
 
         ClearCLBuffer input_float = convertFloat(clij2, input);
         ClearCLBuffer input_kernel_float = convertFloat(clij2, input_kernel);

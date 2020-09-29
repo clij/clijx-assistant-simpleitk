@@ -34,7 +34,7 @@ public class SimpleITKConnectedComponentsLabeling extends AbstractCLIJ2Plugin im
         return result;
     }
 
-    public static boolean simpleItkConnectedComponentsLabeling(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output) {
+    public static synchronized boolean simpleItkConnectedComponentsLabeling(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output) {
 
         // convert to ITK
         Image itk_input = clijToITK(clij2, input);

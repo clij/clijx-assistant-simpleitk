@@ -30,7 +30,7 @@ public class SimpleITKOtsuMultipleThresholds extends AbstractCLIJ2Plugin impleme
         return result;
     }
 
-    public static boolean simpleITKOtsuMultipleThresholds(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output, Integer number_of_thresholds) {
+    public static synchronized boolean simpleITKOtsuMultipleThresholds(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output, Integer number_of_thresholds) {
 
         // convert to ITK
         Image itk_input = clijToITK(clij2, input);

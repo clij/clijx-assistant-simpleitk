@@ -29,7 +29,7 @@ public class SimpleITKDanielssonDistanceMap extends AbstractCLIJ2Plugin implemen
         return result;
     }
 
-    public static boolean simpleITKDanielssonDistanceMap(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output) {
+    public static synchronized boolean simpleITKDanielssonDistanceMap(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output) {
 
         ClearCLBuffer inverted = clij2.create(input);
         clij2.binaryNot(input, inverted);
