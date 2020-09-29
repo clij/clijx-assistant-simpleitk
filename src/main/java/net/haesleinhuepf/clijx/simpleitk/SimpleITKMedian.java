@@ -35,15 +35,8 @@ public class SimpleITKMedian extends AbstractCLIJ2Plugin implements CLIJMacroPlu
         // convert to ITK
         Image itk_input = clijToITK(clij2, input);
 
-        long [] radii = new long[(int)input.getDimension()];
-        radii[0] = radius_x;
-        radii[1] = radius_y;
-        if (radii.length > 2) {
-            radii[2] = radius_z;
-        }
-
         // apply SimpleITK Median
-        Image itk_output = SimpleITK.median(itk_input, new VectorUInt32(radii));
+        Image itk_output = SimpleITK.median(itk_input, CLIJSimpleITKUtilities.packRadii(radius_x, radius_y, radius_z, (int)input.getDimension()));
 
         // push result back
         ClearCLBuffer result = itkToCLIJ(clij2, itk_output);
