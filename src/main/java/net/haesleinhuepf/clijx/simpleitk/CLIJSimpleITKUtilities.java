@@ -4,10 +4,7 @@ import ij.IJ;
 import ij.ImagePlus;
 import net.haesleinhuepf.clij.clearcl.ClearCLBuffer;
 import net.haesleinhuepf.clij2.CLIJ2;
-import org.itk.simple.Image;
-import org.itk.simple.SimpleITK;
-import org.itk.simple.VectorDouble;
-import org.itk.simple.VectorUInt32;
+import org.itk.simple.*;
 
 import java.io.File;
 
@@ -25,6 +22,15 @@ public class CLIJSimpleITKUtilities {
         Image image = SimpleITK.readImage(filename);
         new File(filename).delete();
         return image;
+    }
+
+    public static ClearCLBuffer convertFloat(CLIJ2 clij2, ClearCLBuffer input) {
+        ClearCLBuffer input_float = input;
+        if (input.getNativeType() != clij2.Float) {
+            input_float = clij2.create(input.getDimensions(), clij2.Float);
+            clij2.copy(input, input_float);
+        }
+        return input_float;
     }
 
 
