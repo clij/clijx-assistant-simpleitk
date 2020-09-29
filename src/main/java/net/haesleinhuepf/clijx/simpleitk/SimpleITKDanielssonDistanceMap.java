@@ -2,6 +2,7 @@ package net.haesleinhuepf.clijx.simpleitk;
 
 
 import net.haesleinhuepf.clij.clearcl.ClearCLBuffer;
+import net.haesleinhuepf.clij.coremem.enums.NativeTypeEnum;
 import net.haesleinhuepf.clij.macro.CLIJMacroPlugin;
 import net.haesleinhuepf.clij.macro.CLIJOpenCLProcessor;
 import net.haesleinhuepf.clij.macro.documentation.OffersDocumentation;
@@ -51,6 +52,11 @@ public class SimpleITKDanielssonDistanceMap extends AbstractCLIJ2Plugin implemen
         result.close();
 
         return true;
+    }
+
+    @Override
+    public ClearCLBuffer createOutputBufferFromSource(ClearCLBuffer input) {
+        return getCLIJ2().create(input.getDimensions(), NativeTypeEnum.Float);
     }
 
 
