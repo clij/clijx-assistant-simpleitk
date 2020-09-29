@@ -15,8 +15,8 @@ import org.scijava.plugin.Plugin;
 
 import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.*;
 
-@Plugin(type = CLIJMacroPlugin.class, name = "CLIJx_simpleITKConvolution")
-public class SimpleITKConvolution extends AbstractCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
+@Plugin(type = CLIJMacroPlugin.class, name = "CLIJx_simpleITKFFTConvolution")
+public class SimpleITKFFTConvolution extends AbstractCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
 {
     @Override
     public String getParameterHelpText() {
@@ -25,11 +25,11 @@ public class SimpleITKConvolution extends AbstractCLIJ2Plugin implements CLIJMac
 
     @Override
     public boolean executeCL() {
-        boolean result = simpleITKConvolution(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), (ClearCLBuffer) (args[2]));
+        boolean result = simpleITKFFTConvolution(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), (ClearCLBuffer) (args[2]));
         return result;
     }
 
-    public static synchronized boolean simpleITKConvolution(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer input_kernel, ClearCLBuffer output) {
+    public static synchronized boolean simpleITKFFTConvolution(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer input_kernel, ClearCLBuffer output) {
 
         ClearCLBuffer input_float = convertFloat(clij2, input);
         ClearCLBuffer input_kernel_float = convertFloat(clij2, input_kernel);
@@ -45,8 +45,8 @@ public class SimpleITKConvolution extends AbstractCLIJ2Plugin implements CLIJMac
             input_kernel_float.close();
         }
 
-        // apply SimpleITK convolution
-        Image itk_output = SimpleITK.convolution(itk_input, itk_input_kernel);
+        // apply SimpleITK FFT convolution
+        Image itk_output = SimpleITK.fFTConvolution(itk_input, itk_input_kernel);
 
         // push result back
         ClearCLBuffer result = itkToCLIJ(clij2, itk_output);
@@ -67,7 +67,7 @@ public class SimpleITKConvolution extends AbstractCLIJ2Plugin implements CLIJMac
 
     @Override
     public String getDescription() {
-        return "Convolve an image with a kernel image using SimpleITK.";
+        return "Convolve an image with a kernel image using SimpleITK and a fast Fourier transform (FFT).";
     }
 
     @Override
