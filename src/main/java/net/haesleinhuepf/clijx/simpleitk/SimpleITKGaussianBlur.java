@@ -38,7 +38,7 @@ public class SimpleITKGaussianBlur extends AbstractCLIJ2Plugin implements CLIJMa
         // convert to ITK
         Image itk_input = clijToITK(clij2, input);
 
-        // apply Simple Gaussian Blur
+        // apply SimpleITK Gaussian Blur
         Image itk_output = SimpleITK.discreteGaussian(itk_input, sigma);
 
         // push result back
