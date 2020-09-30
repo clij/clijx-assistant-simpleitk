@@ -2,6 +2,7 @@ package net.haesleinhuepf.clijx.simpleitk;
 
 
 import net.haesleinhuepf.clij.clearcl.ClearCLBuffer;
+import net.haesleinhuepf.clij.coremem.enums.NativeTypeEnum;
 import net.haesleinhuepf.clij.macro.CLIJMacroPlugin;
 import net.haesleinhuepf.clij.macro.CLIJOpenCLProcessor;
 import net.haesleinhuepf.clij.macro.documentation.OffersDocumentation;
@@ -12,8 +13,8 @@ import org.itk.simple.Image;
 import org.itk.simple.SimpleITK;
 import org.scijava.plugin.Plugin;
 
-import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.clijToITK;
-import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.itkToCLIJ;
+import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.*;
+import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.convertFloat;
 
 @Plugin(type = CLIJMacroPlugin.class, name = "CLIJx_simpleITKWienerDeconvolution")
 public class SimpleITKWienerDeconvolution extends AbstractCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
@@ -31,9 +32,20 @@ public class SimpleITKWienerDeconvolution extends AbstractCLIJ2Plugin implements
 
     public static boolean simpleItkWienerDeconvolution(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer input_psf, ClearCLBuffer output, Float noise_variance, Boolean normalize ) {
 
+
+        ClearCLBuffer input_float = convertFloat(clij2, input);
+        ClearCLBuffer input_psf_float = convertFloat(clij2, input_psf);
+
         // convert to ITK
-        Image itk_input = clijToITK(clij2, input);
-        Image itk_input_psf = clijToITK(clij2, input_psf);
+        Image itk_input = clijToITK(clij2, input_float);
+        Image itk_input_psf = clijToITK(clij2, input_psf_float);
+
+        if (input_float != input) {
+            input_float.close();
+        }
+        if (input_psf_float != input) {
+            input_psf_float.close();
+        }
 
         // apply Simple Wiener Deconvolution
         Image itk_output = SimpleITK.wienerDeconvolution(itk_input, itk_input_psf, noise_variance, normalize);
@@ -50,6 +62,10 @@ public class SimpleITKWienerDeconvolution extends AbstractCLIJ2Plugin implements
         return true;
     }
 
+    @Override
+    public ClearCLBuffer createOutputBufferFromSource(ClearCLBuffer input) {
+        return getCLIJ2().create(input.getDimensions(), NativeTypeEnum.Float);
+    }
 
     @Override
     public String getDescription() {
