@@ -106,10 +106,6 @@
 		</dependency>
 		<dependency>
 			<groupId>net.haesleinhuepf</groupId>
-			<artifactId>clijx_</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.haesleinhuepf</groupId>
 			<artifactId>clij-clearcl</artifactId>
 		</dependency>
 		<dependency>
@@ -123,11 +119,6 @@
 		<dependency>
 			<groupId>net.imglib2</groupId>
 			<artifactId>imglib2</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.haesleinhuepf</groupId>
-			<artifactId>clijx-assistant_</artifactId>
-			<version>${clijx_assistant.version}</version>
 		</dependency>
 		<dependency>
 			<artifactId>.simpleitk.</artifactId>
