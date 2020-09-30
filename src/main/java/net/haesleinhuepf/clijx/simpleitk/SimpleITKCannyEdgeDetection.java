@@ -27,7 +27,7 @@ public class SimpleITKCannyEdgeDetection extends AbstractCLIJ2Plugin implements 
 
     @Override
     public Object[] getDefaultValues() {
-        return new Object[]{null, null, 0, 100, 0.5, 0.1};
+        return new Object[]{null, null, 0, 0, 0.0, 0.1};
     }
 
     @Override
