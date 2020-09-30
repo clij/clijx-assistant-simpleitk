@@ -11,6 +11,7 @@ import net.haesleinhuepf.clij2.AbstractCLIJ2Plugin;
 import net.haesleinhuepf.clij2.CLIJ2;
 import net.haesleinhuepf.clij2.utilities.IsCategorized;
 import org.itk.simple.Image;
+import org.itk.simple.PixelIDValueEnum;
 import org.itk.simple.SimpleITK;
 import org.scijava.plugin.Plugin;
 
@@ -19,30 +20,30 @@ import java.io.File;
 import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.clijToITK;
 import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.itkToCLIJ;
 
-@Plugin(type = CLIJMacroPlugin.class, name = "CLIJx_simpleITKGaussianBlur")
-public class SimpleITKGaussianBlur extends AbstractCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
+@Plugin(type = CLIJMacroPlugin.class, name = "CLIJx_simpleITKConnectedComponent")
+public class SimpleITKConnectedComponent extends AbstractCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
 {
     @Override
     public String getParameterHelpText() {
-        return "Image input, ByRef Image destination, Number sigma_x, Number sigma_y, Number sigma_z";
+        return "Image input, ByRef Image destination";
     }
 
     @Override
     public boolean executeCL() {
-        boolean result = simpleItkGaussianBlur(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), asFloat(args[2]), asFloat(args[2]), asFloat(args[2]));
+        boolean result = simpleITKConnectedComponent(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]));
         return result;
     }
 
-    public static synchronized boolean simpleItkGaussianBlur(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output, Float sigma_x, Float sigma_y, Float sigma_z) {
+    public static synchronized boolean simpleITKConnectedComponent(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output) {
 
         // convert to ITK
         Image itk_input = clijToITK(clij2, input);
 
-        // apply SimpleITK Gaussian Blur
-        Image itk_output = SimpleITK.discreteGaussian(itk_input, CLIJSimpleITKUtilities.packRadii(sigma_x, sigma_y, sigma_z, (int)input.getDimension()));
+        // apply Simple ITK CCA
+        Image itk_output = SimpleITK.connectedComponent(itk_input);
 
         // push result back
-        ClearCLBuffer result = itkToCLIJ(clij2, itk_output);
+        ClearCLBuffer result = itkToCLIJ(clij2, SimpleITK.cast(itk_output, PixelIDValueEnum.sitkFloat32));
 
         // save it in the right place
         clij2.copy(result, output);
@@ -56,7 +57,7 @@ public class SimpleITKGaussianBlur extends AbstractCLIJ2Plugin implements CLIJMa
 
     @Override
     public String getDescription() {
-        return "Apply SimpleITKs Gaussian Blur to an image.";
+        return "Apply SimpleITKs ConnectedComponent to an image.";
     }
 
     @Override
@@ -66,6 +67,6 @@ public class SimpleITKGaussianBlur extends AbstractCLIJ2Plugin implements CLIJMa
 
     @Override
     public String getCategories() {
-        return "Filter";
+        return "Labeling";
     }
 }
