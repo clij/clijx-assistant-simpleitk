@@ -72,7 +72,8 @@ public class SimpleITKCannyEdgeDetection extends AbstractCLIJ2Plugin implements 
 
     @Override
     public String getDescription() {
-        return "Apply SimpleITKs Canny edge detection filter to an image.";
+        return "Apply SimpleITKs Canny edge detection filter to an image.\n\n" +
+                "https://simpleitk.org/doxygen/latest/html/classitk_1_1simple_1_1CannyEdgeDetectionImageFilter.html";
     }
 
     @Override

@@ -53,7 +53,8 @@ public class SimpleITKOtsuThreshold extends AbstractCLIJ2Plugin implements CLIJM
 
     @Override
     public String getDescription() {
-        return "Apply SimpleITKs Otsu Thresholding to an image.";
+        return "Apply SimpleITKs Otsu Thresholding to an image.\n\n" +
+                "See also: https://simpleitk.org/doxygen/latest/html/classitk_1_1simple_1_1OtsuThresholdImageFilter.html";
     }
 
     @Override

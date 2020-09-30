@@ -63,7 +63,8 @@ public class SimpleITKDanielssonDistanceMap extends AbstractCLIJ2Plugin implemen
     @Override
     public String getDescription() {
         return "Generate SimpleITKs Danielsson distance map from a binary image.\n\n" +
-                "Compared to SimpleITK, the image is binary inverted before the map is generated to make the operation similar to ImageJs implementation.";
+                "Compared to SimpleITK, the image is binary inverted before the map is generated to make the operation similar to ImageJs implementation.\n\n" +
+                "See also: https://simpleitk.org/doxygen/latest/html/classitk_1_1simple_1_1DanielssonDistanceMapImageFilter.html";
     }
 
     @Override

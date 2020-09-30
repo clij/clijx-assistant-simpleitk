@@ -64,7 +64,8 @@ public class SimpleITKBoundedReciprocal extends AbstractCLIJ2Plugin implements C
     @Override
     public String getDescription() {
         return "Apply SimpleITKs BoundedReciprocal to an image.\n\n" +
-                "Computes 1/(1+x) for each pixel\nSee also: https://simpleitk.org/doxygen/latest/html/classitk_1_1simple_1_1BoundedReciprocalImageFilter.html#details";
+                "Computes 1/(1+x) for each pixel\n" +
+                "See also: https://simpleitk.org/doxygen/latest/html/classitk_1_1simple_1_1BoundedReciprocalImageFilter.html#details";
     }
 
     @Override

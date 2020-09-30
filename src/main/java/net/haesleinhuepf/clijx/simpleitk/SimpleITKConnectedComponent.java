@@ -57,7 +57,8 @@ public class SimpleITKConnectedComponent extends AbstractCLIJ2Plugin implements 
 
     @Override
     public String getDescription() {
-        return "Apply SimpleITKs ConnectedComponent to an image.";
+        return "Apply SimpleITKs ConnectedComponent to an image.\n\n" +
+                "See also: https://simpleitk.org/doxygen/latest/html/classitk_1_1simple_1_1ConnectedComponentImageFilter.html";
     }
 
     @Override

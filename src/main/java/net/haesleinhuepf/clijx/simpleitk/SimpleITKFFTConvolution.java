@@ -67,7 +67,8 @@ public class SimpleITKFFTConvolution extends AbstractCLIJ2Plugin implements CLIJ
 
     @Override
     public String getDescription() {
-        return "Convolve an image with a kernel image using SimpleITK and a fast Fourier transform (FFT).";
+        return "Convolve an image with a kernel image using SimpleITK and a fast Fourier transform (FFT).\n\n" +
+                "See also: https://simpleitk.org/doxygen/latest/html/classitk_1_1simple_1_1FFTConvolutionImageFilter.html";
     }
 
     @Override

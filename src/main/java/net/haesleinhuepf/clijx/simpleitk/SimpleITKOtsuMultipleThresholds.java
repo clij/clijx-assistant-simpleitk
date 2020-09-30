@@ -53,7 +53,8 @@ public class SimpleITKOtsuMultipleThresholds extends AbstractCLIJ2Plugin impleme
 
     @Override
     public String getDescription() {
-        return "Apply SimpleITKs Otsu Multiple Thresholds to an image.";
+        return "Apply SimpleITKs Otsu Multiple Thresholds to an image.\n\n" +
+                "See also: https://simpleitk.org/doxygen/latest/html/classitk_1_1simple_1_1OtsuMultipleThresholdsImageFilter.html";
     }
 
     @Override

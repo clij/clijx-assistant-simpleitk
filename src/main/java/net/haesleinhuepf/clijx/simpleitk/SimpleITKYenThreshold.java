@@ -53,7 +53,8 @@ public class SimpleITKYenThreshold extends AbstractCLIJ2Plugin implements CLIJMa
 
     @Override
     public String getDescription() {
-        return "Apply SimpleITKs Yen Threshold to an image.";
+        return "Apply SimpleITKs Yen Threshold to an image.\n\n" +
+                "See also: https://simpleitk.org/doxygen/latest/html/classitk_1_1simple_1_1YenThresholdImageFilter.html";
     }
 
     @Override

@@ -53,7 +53,8 @@ public class SimpleITKMedian extends AbstractCLIJ2Plugin implements CLIJMacroPlu
 
     @Override
     public String getDescription() {
-        return "Apply SimpleITKs Median filter to an image.";
+        return "Apply SimpleITKs Median filter to an image.\n\n" +
+                "See also: https://simpleitk.org/doxygen/latest/html/classitk_1_1simple_1_1MedianImageFilter.html";
     }
 
     @Override

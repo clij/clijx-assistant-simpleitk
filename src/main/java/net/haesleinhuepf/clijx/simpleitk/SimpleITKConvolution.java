@@ -67,7 +67,8 @@ public class SimpleITKConvolution extends AbstractCLIJ2Plugin implements CLIJMac
 
     @Override
     public String getDescription() {
-        return "Convolve an image with a kernel image using SimpleITK.";
+        return "Convolve an image with a kernel image using SimpleITK.\n\n" +
+                "See also: https://simpleitk.org/doxygen/latest/html/classitk_1_1simple_1_1ConvolutionImageFilter.html";
     }
 
     @Override

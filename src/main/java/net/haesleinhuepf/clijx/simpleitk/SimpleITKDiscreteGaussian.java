@@ -19,8 +19,8 @@ import java.io.File;
 import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.clijToITK;
 import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.itkToCLIJ;
 
-@Plugin(type = CLIJMacroPlugin.class, name = "CLIJx_simpleITKGaussianBlur")
-public class SimpleITKGaussianBlur extends AbstractCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
+@Plugin(type = CLIJMacroPlugin.class, name = "CLIJx_simpleITKDiscreteGaussian")
+public class SimpleITKDiscreteGaussian extends AbstractCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
 {
     @Override
     public String getParameterHelpText() {
@@ -29,11 +29,11 @@ public class SimpleITKGaussianBlur extends AbstractCLIJ2Plugin implements CLIJMa
 
     @Override
     public boolean executeCL() {
-        boolean result = simpleItkGaussianBlur(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), asFloat(args[2]), asFloat(args[2]), asFloat(args[2]));
+        boolean result = simpleITKDiscreteGaussian(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), asFloat(args[2]), asFloat(args[2]), asFloat(args[2]));
         return result;
     }
 
-    public static synchronized boolean simpleItkGaussianBlur(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output, Float sigma_x, Float sigma_y, Float sigma_z) {
+    public static synchronized boolean simpleITKDiscreteGaussian(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output, Float sigma_x, Float sigma_y, Float sigma_z) {
 
         // convert to ITK
         Image itk_input = clijToITK(clij2, input);
@@ -56,7 +56,8 @@ public class SimpleITKGaussianBlur extends AbstractCLIJ2Plugin implements CLIJMa
 
     @Override
     public String getDescription() {
-        return "Apply SimpleITKs Gaussian Blur to an image.";
+        return "Apply SimpleITKs Gaussian Blur to an image.\n\n" +
+                "See also: https://simpleitk.org/doxygen/latest/html/classitk_1_1simple_1_1DiscreteGaussianImageFilter.html";
     }
 
     @Override
