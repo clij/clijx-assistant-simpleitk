@@ -1,9 +1,8 @@
 package net.haesleinhuepf.clijx.simpleitk;
 
 
-import ij.IJ;
-import ij.ImagePlus;
 import net.haesleinhuepf.clij.clearcl.ClearCLBuffer;
+import net.haesleinhuepf.clij.coremem.enums.NativeTypeEnum;
 import net.haesleinhuepf.clij.macro.CLIJMacroPlugin;
 import net.haesleinhuepf.clij.macro.CLIJOpenCLProcessor;
 import net.haesleinhuepf.clij.macro.documentation.OffersDocumentation;
@@ -14,13 +13,11 @@ import org.itk.simple.Image;
 import org.itk.simple.SimpleITK;
 import org.scijava.plugin.Plugin;
 
-import java.io.File;
-
 import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.clijToITK;
 import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.itkToCLIJ;
 
-@Plugin(type = CLIJMacroPlugin.class, name = "CLIJx_simpleITKConnectedComponentsLabeling")
-public class SimpleITKConnectedComponentsLabeling extends AbstractCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
+@Plugin(type = CLIJMacroPlugin.class, name = "CLIJx_simpleITKDanielssonDistanceMap")
+public class SimpleITKDanielssonDistanceMap extends AbstractCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
 {
     @Override
     public String getParameterHelpText() {
@@ -29,17 +26,21 @@ public class SimpleITKConnectedComponentsLabeling extends AbstractCLIJ2Plugin im
 
     @Override
     public boolean executeCL() {
-        boolean result = simpleItkConnectedComponentsLabeling(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]));
+        boolean result = simpleITKDanielssonDistanceMap(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]));
         return result;
     }
 
-    public static boolean simpleItkConnectedComponentsLabeling(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output) {
+    public static synchronized boolean simpleITKDanielssonDistanceMap(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output) {
+
+        ClearCLBuffer inverted = clij2.create(input);
+        clij2.binaryNot(input, inverted);
 
         // convert to ITK
-        Image itk_input = clijToITK(clij2, input);
+        Image itk_input = clijToITK(clij2, inverted);
+        inverted.close();
 
-        // apply Simple ITK CCA
-        Image itk_output = SimpleITK.connectedComponent(itk_input);
+        // apply SimpleITK distance map
+        Image itk_output = SimpleITK.danielssonDistanceMap(itk_input, true);
 
         // push result back
         ClearCLBuffer result = itkToCLIJ(clij2, itk_output);
@@ -53,10 +54,16 @@ public class SimpleITKConnectedComponentsLabeling extends AbstractCLIJ2Plugin im
         return true;
     }
 
+    @Override
+    public ClearCLBuffer createOutputBufferFromSource(ClearCLBuffer input) {
+        return getCLIJ2().create(input.getDimensions(), NativeTypeEnum.Float);
+    }
+
 
     @Override
     public String getDescription() {
-        return "Apply SimpleITKs ConnectedComponent to an image.";
+        return "Generate SimpleITKs Danielsson distance map from a binary image.\n\n" +
+                "Compared to SimpleITK, the image is binary inverted before the map is generated to make the operation similar to ImageJs implementation.";
     }
 
     @Override
@@ -66,6 +73,6 @@ public class SimpleITKConnectedComponentsLabeling extends AbstractCLIJ2Plugin im
 
     @Override
     public String getCategories() {
-        return "Labeling";
+        return "Binary,Filter";
     }
 }

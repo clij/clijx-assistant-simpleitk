@@ -1,6 +1,10 @@
 ## CLIJx-SimpleITK bridge
 This repository bridges [SimpleITK](https://simpleitk.org/) and [clij](https://clij.github.io).
 
+![Image](images/screenshot.png)
+
+This is preliminary right now.
+
 ## Installation in Fiji
 Follow the installation instructions [here](https://clij.github.io/assistant/installation).
 
