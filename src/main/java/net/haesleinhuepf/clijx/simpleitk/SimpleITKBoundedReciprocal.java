@@ -45,7 +45,7 @@ public class SimpleITKBoundedReciprocal extends AbstractCLIJ2Plugin implements C
         Image itk_output = SimpleITK.boundedReciprocal(itk_input);
 
         // push result back
-        ClearCLBuffer result = itkToCLIJ(clij2, itk_output);
+        ClearCLBuffer result = itkToCLIJ(clij2,  SimpleITK.cast(itk_output, PixelIDValueEnum.sitkFloat32));
 
         // save it in the right place
         clij2.copy(result, output);
