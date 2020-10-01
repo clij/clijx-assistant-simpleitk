@@ -41,7 +41,7 @@ public class SimpleITKYenThreshold extends AbstractCLIJ2Plugin implements CLIJMa
         ClearCLBuffer result = itkToCLIJ(clij2, itk_output);
 
         // save it in the right place
-        clij2.invert(result, output);
+        clij2.binaryNot(result, output);
 
         // clean up
         result.close();
