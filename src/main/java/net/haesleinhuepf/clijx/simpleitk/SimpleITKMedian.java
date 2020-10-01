@@ -13,8 +13,7 @@ import org.itk.simple.SimpleITK;
 import org.itk.simple.VectorUInt32;
 import org.scijava.plugin.Plugin;
 
-import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.clijToITK;
-import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.itkToCLIJ;
+import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.*;
 
 @Plugin(type = CLIJMacroPlugin.class, name = "CLIJx_simpleITKMedian")
 public class SimpleITKMedian extends AbstractCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
@@ -26,7 +25,7 @@ public class SimpleITKMedian extends AbstractCLIJ2Plugin implements CLIJMacroPlu
 
     @Override
     public boolean executeCL() {
-        boolean result = simpleITKMedian(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), asInteger(args[2]), asInteger(args[3]), asInteger(args[4]));
+        boolean result = runAndCatch(() -> simpleITKMedian(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), asInteger(args[2]), asInteger(args[3]), asInteger(args[4])));
         return result;
     }
 

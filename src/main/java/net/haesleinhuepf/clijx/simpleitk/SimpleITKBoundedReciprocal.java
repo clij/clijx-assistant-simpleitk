@@ -26,7 +26,7 @@ public class SimpleITKBoundedReciprocal extends AbstractCLIJ2Plugin implements C
 
     @Override
     public boolean executeCL() {
-        boolean result = simpleITKBoundedReciprocal(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]));
+        boolean result = runAndCatch(() -> simpleITKBoundedReciprocal(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1])));
         return result;
     }
 

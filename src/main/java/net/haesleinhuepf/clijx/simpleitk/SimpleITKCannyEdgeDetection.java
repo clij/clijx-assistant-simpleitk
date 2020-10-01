@@ -14,8 +14,7 @@ import org.itk.simple.SimpleITK;
 import org.itk.simple.VectorUInt32;
 import org.scijava.plugin.Plugin;
 
-import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.clijToITK;
-import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.itkToCLIJ;
+import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.*;
 
 @Plugin(type = CLIJMacroPlugin.class, name = "CLIJx_simpleITKCannyEdgeDetection")
 public class SimpleITKCannyEdgeDetection extends AbstractCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
@@ -32,11 +31,11 @@ public class SimpleITKCannyEdgeDetection extends AbstractCLIJ2Plugin implements 
 
     @Override
     public boolean executeCL() {
-        boolean result = simpleITKCannyEdgeDetection(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), asFloat(args[2]), asFloat(args[3]), asFloat(args[4]), asFloat(args[5]));
+        boolean result = runAndCatch(() -> simpleITKCannyEdgeDetection(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), asFloat(args[2]), asFloat(args[3]), asFloat(args[4]), asFloat(args[5])));
         return result;
     }
 
-    public static boolean simpleITKCannyEdgeDetection(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output, Float lower_threshold, Float upper_threshold, Float variance, Float maximum_error) {
+    public synchronized static boolean simpleITKCannyEdgeDetection(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output, Float lower_threshold, Float upper_threshold, Float variance, Float maximum_error) {
 
         ClearCLBuffer inputFloat = input;
         // make sure that its type is float

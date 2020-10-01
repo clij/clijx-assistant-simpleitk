@@ -17,8 +17,7 @@ import org.scijava.plugin.Plugin;
 
 import java.io.File;
 
-import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.clijToITK;
-import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.itkToCLIJ;
+import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.*;
 
 @Plugin(type = CLIJMacroPlugin.class, name = "CLIJx_simpleITKConnectedComponent")
 public class SimpleITKConnectedComponent extends AbstractCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
@@ -30,7 +29,7 @@ public class SimpleITKConnectedComponent extends AbstractCLIJ2Plugin implements 
 
     @Override
     public boolean executeCL() {
-        boolean result = simpleITKConnectedComponent(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]));
+        boolean result = runAndCatch(() -> simpleITKConnectedComponent(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1])));
         return result;
     }
 

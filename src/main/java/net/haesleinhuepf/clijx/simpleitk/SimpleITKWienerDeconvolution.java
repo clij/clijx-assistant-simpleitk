@@ -26,7 +26,7 @@ public class SimpleITKWienerDeconvolution extends AbstractCLIJ2Plugin implements
 
     @Override
     public boolean executeCL() {
-        boolean result = simpleItkWienerDeconvolution(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), (ClearCLBuffer) (args[2]), asFloat(args[3]), asBoolean(args[4]));
+        boolean result = runAndCatch(() -> simpleItkWienerDeconvolution(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), (ClearCLBuffer) (args[2]), asFloat(args[3]), asBoolean(args[4])));
         return result;
     }
 

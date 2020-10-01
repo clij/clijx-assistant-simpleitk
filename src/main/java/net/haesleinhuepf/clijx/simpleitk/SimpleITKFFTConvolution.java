@@ -25,7 +25,7 @@ public class SimpleITKFFTConvolution extends AbstractCLIJ2Plugin implements CLIJ
 
     @Override
     public boolean executeCL() {
-        boolean result = simpleITKFFTConvolution(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), (ClearCLBuffer) (args[2]));
+        boolean result = runAndCatch(() -> simpleITKFFTConvolution(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), (ClearCLBuffer) (args[2])));
         return result;
     }
 

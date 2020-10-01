@@ -13,8 +13,7 @@ import org.itk.simple.Image;
 import org.itk.simple.SimpleITK;
 import org.scijava.plugin.Plugin;
 
-import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.clijToITK;
-import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.itkToCLIJ;
+import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.*;
 
 @Plugin(type = CLIJMacroPlugin.class, name = "CLIJx_simpleITKDanielssonDistanceMap")
 public class SimpleITKDanielssonDistanceMap extends AbstractCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
@@ -26,7 +25,7 @@ public class SimpleITKDanielssonDistanceMap extends AbstractCLIJ2Plugin implemen
 
     @Override
     public boolean executeCL() {
-        boolean result = simpleITKDanielssonDistanceMap(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]));
+        boolean result = runAndCatch(() -> simpleITKDanielssonDistanceMap(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1])));
         return result;
     }
 

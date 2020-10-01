@@ -13,8 +13,7 @@ import org.itk.simple.PixelIDValueEnum;
 import org.itk.simple.SimpleITK;
 import org.scijava.plugin.Plugin;
 
-import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.clijToITK;
-import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.itkToCLIJ;
+import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.*;
 
 @Plugin(type = CLIJMacroPlugin.class, name = "CLIJx_simpleITKYenThreshold")
 public class SimpleITKYenThreshold extends AbstractCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
@@ -26,7 +25,7 @@ public class SimpleITKYenThreshold extends AbstractCLIJ2Plugin implements CLIJMa
 
     @Override
     public boolean executeCL() {
-        boolean result = simpleITKYenThreshold(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]));
+        boolean result = runAndCatch(() -> simpleITKYenThreshold(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1])));
         return result;
     }
 

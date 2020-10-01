@@ -16,8 +16,7 @@ import org.scijava.plugin.Plugin;
 
 import java.io.File;
 
-import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.clijToITK;
-import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.itkToCLIJ;
+import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.*;
 
 @Plugin(type = CLIJMacroPlugin.class, name = "CLIJx_simpleITKDiscreteGaussian")
 public class SimpleITKDiscreteGaussian extends AbstractCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
@@ -29,7 +28,7 @@ public class SimpleITKDiscreteGaussian extends AbstractCLIJ2Plugin implements CL
 
     @Override
     public boolean executeCL() {
-        boolean result = simpleITKDiscreteGaussian(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), asFloat(args[2]), asFloat(args[2]), asFloat(args[2]));
+        boolean result = runAndCatch(() -> simpleITKDiscreteGaussian(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), asFloat(args[2]), asFloat(args[2]), asFloat(args[2])));
         return result;
     }
 

@@ -25,7 +25,7 @@ public class SimpleITKConvolution extends AbstractCLIJ2Plugin implements CLIJMac
 
     @Override
     public boolean executeCL() {
-        boolean result = simpleITKConvolution(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), (ClearCLBuffer) (args[2]));
+        boolean result = runAndCatch(() -> simpleITKConvolution(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), (ClearCLBuffer) (args[2])));
         return result;
     }
 

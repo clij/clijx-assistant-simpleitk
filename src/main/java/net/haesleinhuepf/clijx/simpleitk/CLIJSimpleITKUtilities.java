@@ -71,4 +71,14 @@ public class CLIJSimpleITKUtilities {
         }
         return new VectorDouble(radii);
     }
+
+    public static synchronized boolean runAndCatch(Runnable r) {
+        try {
+            r.run();
+        } catch (Exception e ){
+            System.err.println(e);
+            return false;
+        }
+        return true;
+    }
 }
