@@ -52,7 +52,6 @@ public class SimpleITKZeroCrossing extends AbstractCLIJ2Plugin implements CLIJMa
     @Override
     public String getDescription() {
         return "Apply SimpleITKs ZeroCrossing to an image.\n\n" +
-                "Compared to SimpleITKs implementation, results are inverted to match ImageJs behaviour.\n" +
                 "See also: https://simpleitk.org/doxygen/latest/html/classitk_1_1simple_1_1ZeroCrossingImageFilter.html";
     }
 
