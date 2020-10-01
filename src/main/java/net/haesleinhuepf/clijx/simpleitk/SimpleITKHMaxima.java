@@ -33,7 +33,7 @@ public class SimpleITKHMaxima extends AbstractCLIJ2Plugin implements CLIJMacroPl
         // convert to ITK
         Image itk_input = clijToITK(clij2, input);
 
-        // apply SimpleITK Median
+        // apply SimpleITK HMaxima
         Image itk_output = SimpleITK.hMaxima(itk_input, h);
 
         // push result back
