@@ -3,10 +3,16 @@ package net.haesleinhuepf.clijx.simpleitk;
 import ij.IJ;
 import ij.ImagePlus;
 import net.haesleinhuepf.clij.clearcl.ClearCLBuffer;
+import net.haesleinhuepf.clij.clearcl.ClearCLHostImageBuffer;
+import net.haesleinhuepf.clij.coremem.ContiguousMemoryInterface;
+import net.haesleinhuepf.clij.coremem.interop.NIOBuffersInterop;
+import net.haesleinhuepf.clij.coremem.offheap.OffHeapMemory;
 import net.haesleinhuepf.clij2.CLIJ2;
 import org.itk.simple.*;
+import org.jocl.Pointer;
 
 import java.io.File;
+import java.nio.FloatBuffer;
 
 public class CLIJSimpleITKUtilities {
 
@@ -17,7 +23,23 @@ public class CLIJSimpleITKUtilities {
         clij2.saveAsTIF(input, filename);
         //ImagePlus imp = clij2.pull(input);
         //IJ.run(imp, "Nrrd ... ", "nrrd=" + filename);
+/*
+        PixelIDValueEnum.sitkUInt8
+        PixelIDValueEnum.sitkUInt16
+        PixelIDValueEnum.sitkFloat32
 
+
+        Image image = new Image(input.getWidth(), input.getHeight(), input.getDepth());
+        SWIGTYPE_p_float bufferAsFloat = image.getBufferAsFloat();
+        SimpleITKJNI.
+
+
+        OffHeapMemory.wrapPointer()
+
+        ContiguousMemoryInterface mem =
+        ClearCLHostImageBuffer buffer = new ClearCLHostImageBuffer();
+
+        input.cop*/
 
         Image image = SimpleITK.readImage(filename);
         new File(filename).delete();
