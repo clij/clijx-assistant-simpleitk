@@ -41,7 +41,7 @@ public class SimpleITKYenThreshold extends AbstractCLIJ2Plugin implements CLIJMa
         ClearCLBuffer result = itkToCLIJ(clij2, itk_output);
 
         // save it in the right place
-        clij2.copy(result, output);
+        clij2.invert(result, output);
 
         // clean up
         result.close();
@@ -53,6 +53,7 @@ public class SimpleITKYenThreshold extends AbstractCLIJ2Plugin implements CLIJMa
     @Override
     public String getDescription() {
         return "Apply SimpleITKs Yen Threshold to an image.\n\n" +
+                "Compared to SimpleITKs implementation, results are inverted to match ImageJs behaviour.\n" +
                 "See also: https://simpleitk.org/doxygen/latest/html/classitk_1_1simple_1_1YenThresholdImageFilter.html";
     }
 
