@@ -10,6 +10,7 @@ import net.haesleinhuepf.clij2.AbstractCLIJ2Plugin;
 import net.haesleinhuepf.clij2.CLIJ2;
 import net.haesleinhuepf.clij2.utilities.IsCategorized;
 import org.itk.simple.Image;
+import org.itk.simple.PixelIDValueEnum;
 import org.itk.simple.SimpleITK;
 import org.itk.simple.VectorUInt32;
 import org.scijava.plugin.Plugin;
@@ -37,19 +38,9 @@ public class SimpleITKCannyEdgeDetection extends AbstractCLIJ2Plugin implements 
 
     public synchronized static boolean simpleITKCannyEdgeDetection(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output, Float lower_threshold, Float upper_threshold, Float variance, Float maximum_error) {
 
-        ClearCLBuffer inputFloat = input;
-        // make sure that its type is float
-        if (input.getNativeType() != clij2.Float) {
-            inputFloat = clij2.create(input.getDimensions(), clij2.Float);
-            clij2.copy(input, inputFloat);
-        }
-
         // convert to ITK
-        Image itk_input = clijToITK(clij2, inputFloat);
-
-        if (input != inputFloat) {
-            inputFloat.close();
-        }
+        Image itk_input = clijToITK(clij2, input);
+        itk_input = SimpleITK.cast(itk_input, PixelIDValueEnum.sitkFloat32);
 
         // apply SimpleITK Median
         Image itk_output = SimpleITK.cannyEdgeDetection(itk_input, lower_threshold, upper_threshold,

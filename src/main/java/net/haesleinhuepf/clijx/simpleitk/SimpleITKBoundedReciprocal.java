@@ -32,14 +32,9 @@ public class SimpleITKBoundedReciprocal extends AbstractCLIJ2Plugin implements C
 
     public static synchronized boolean simpleITKBoundedReciprocal(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output) {
 
-        ClearCLBuffer input_float = convertFloat(clij2, input);
-
         // convert to ITK
-        Image itk_input = clijToITK(clij2, input_float);
-
-        if (input_float != input) {
-            input_float.close();
-        }
+        Image itk_input = clijToITK(clij2, input);
+        itk_input = SimpleITK.cast(itk_input, PixelIDValueEnum.sitkFloat32);
 
         // apply Simple ITK BoundedReciprocal
         Image itk_output = SimpleITK.boundedReciprocal(itk_input);

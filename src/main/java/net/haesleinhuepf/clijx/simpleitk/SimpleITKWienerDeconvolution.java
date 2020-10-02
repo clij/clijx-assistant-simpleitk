@@ -10,11 +10,11 @@ import net.haesleinhuepf.clij2.AbstractCLIJ2Plugin;
 import net.haesleinhuepf.clij2.CLIJ2;
 import net.haesleinhuepf.clij2.utilities.IsCategorized;
 import org.itk.simple.Image;
+import org.itk.simple.PixelIDValueEnum;
 import org.itk.simple.SimpleITK;
 import org.scijava.plugin.Plugin;
 
 import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.*;
-import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.convertFloat;
 
 @Plugin(type = CLIJMacroPlugin.class, name = "CLIJx_simpleITKWienerDeconvolution")
 public class SimpleITKWienerDeconvolution extends AbstractCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
@@ -31,21 +31,11 @@ public class SimpleITKWienerDeconvolution extends AbstractCLIJ2Plugin implements
     }
 
     public static boolean simpleItkWienerDeconvolution(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer input_psf, ClearCLBuffer output, Float noise_variance, Boolean normalize ) {
-
-
-        ClearCLBuffer input_float = convertFloat(clij2, input);
-        ClearCLBuffer input_psf_float = convertFloat(clij2, input_psf);
-
         // convert to ITK
-        Image itk_input = clijToITK(clij2, input_float);
-        Image itk_input_psf = clijToITK(clij2, input_psf_float);
-
-        if (input_float != input) {
-            input_float.close();
-        }
-        if (input_psf_float != input) {
-            input_psf_float.close();
-        }
+        Image itk_input = clijToITK(clij2, input);
+        Image itk_input_psf = clijToITK(clij2, input_psf);
+        itk_input = SimpleITK.cast(itk_input, PixelIDValueEnum.sitkFloat32);
+        itk_input_psf = SimpleITK.cast(itk_input_psf, PixelIDValueEnum.sitkFloat32);
 
         // apply Simple Wiener Deconvolution
         Image itk_output = SimpleITK.wienerDeconvolution(itk_input, itk_input_psf, noise_variance, normalize);

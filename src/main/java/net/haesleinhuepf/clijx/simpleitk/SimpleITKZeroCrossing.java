@@ -9,6 +9,7 @@ import net.haesleinhuepf.clij2.AbstractCLIJ2Plugin;
 import net.haesleinhuepf.clij2.CLIJ2;
 import net.haesleinhuepf.clij2.utilities.IsCategorized;
 import org.itk.simple.Image;
+import org.itk.simple.PixelIDValueEnum;
 import org.itk.simple.SimpleITK;
 import org.scijava.plugin.Plugin;
 
@@ -32,6 +33,7 @@ public class SimpleITKZeroCrossing extends AbstractCLIJ2Plugin implements CLIJMa
 
         // convert to ITK
         Image itk_input = clijToITK(clij2, input);
+        itk_input = SimpleITK.cast(itk_input, PixelIDValueEnum.sitkFloat32);
 
         // apply Simple ITK zero crossing
         Image itk_output = SimpleITK.zeroCrossing(itk_input);
