@@ -24,6 +24,12 @@ public class SimpleITKRichardsonLucyDeconvolution extends AbstractCLIJ2Plugin im
         return "Image input, Image input_psf, ByRef Image destination, Number num_iterations, Boolean normalize";
     }
 
+
+    @Override
+    public Object[] getDefaultValues() {
+        return new Object[]{null, null, null, 10};
+    }
+
     @Override
     public boolean executeCL() {
         boolean result = runAndCatch(() -> simpleItkRichardsonLucyDeconvolution(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), (ClearCLBuffer) (args[2]), asInteger(args[3]), asBoolean(args[4])));

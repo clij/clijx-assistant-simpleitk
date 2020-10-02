@@ -24,13 +24,19 @@ public class SimpleITKWienerDeconvolution extends AbstractCLIJ2Plugin implements
         return "Image input, Image input_psf, ByRef Image destination, Number noise_variance, Boolean normalize";
     }
 
+
+    @Override
+    public Object[] getDefaultValues() {
+        return new Object[]{null, null, null, 0, true};
+    }
+
     @Override
     public boolean executeCL() {
-        boolean result = runAndCatch(() -> simpleItkWienerDeconvolution(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), (ClearCLBuffer) (args[2]), asFloat(args[3]), asBoolean(args[4])));
+        boolean result = runAndCatch(() -> simpleITKWienerDeconvolution(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), (ClearCLBuffer) (args[2]), asFloat(args[3]), asBoolean(args[4])));
         return result;
     }
 
-    public static boolean simpleItkWienerDeconvolution(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer input_psf, ClearCLBuffer output, Float noise_variance, Boolean normalize ) {
+    public static boolean simpleITKWienerDeconvolution(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer input_psf, ClearCLBuffer output, Float noise_variance, Boolean normalize ) {
         // convert to ITK
         Image itk_input = clijToITK(clij2, input);
         Image itk_input_psf = clijToITK(clij2, input_psf);
