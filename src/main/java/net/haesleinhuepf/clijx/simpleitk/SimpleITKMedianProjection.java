@@ -44,7 +44,6 @@ public class SimpleITKMedianProjection extends AbstractCLIJ2Plugin implements CL
 
         // push result back
         ClearCLBuffer result = itkToCLIJ(clij2, itk_output);
-        IJ.log("" + result);
 
         // save it in the right place
         clij2.transposeXZ(result, output);
