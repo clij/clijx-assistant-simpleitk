@@ -10,7 +10,12 @@ import net.haesleinhuepf.clij.coremem.interop.JNAInterop;
 import net.haesleinhuepf.clij.coremem.interop.NIOBuffersInterop;
 import net.haesleinhuepf.clij.coremem.offheap.OffHeapMemory;
 import net.haesleinhuepf.clij2.CLIJ2;
+import net.haesleinhuepf.clij2.plugins.Clear;
 import org.itk.simple.*;
+
+import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
+import java.util.Arrays;
 
 public class CLIJSimpleITKUtilities {
 
@@ -87,15 +92,34 @@ public class CLIJSimpleITKUtilities {
         return image;
     }
 
-    public static ClearCLBuffer convertFloat(CLIJ2 clij2, ClearCLBuffer input) {
-        ClearCLBuffer input_float = input;
-        if (input.getNativeType() != clij2.Float) {
-            input_float = clij2.create(input.getDimensions(), clij2.Float);
-            clij2.copy(input, input_float);
-        }
-        return input_float;
-    }
+    public static void main(String[] args) {
+        // create temporary memory on the GPU
+        CLIJ2 clij2 = CLIJ2.getInstance();
+        ClearCLBuffer temp = clij2.create(new long[]{8,1}, NativeTypeEnum.Float);
 
+        float[] array = new float[]{1, 2, 3, 4.5f, 5, 6.5f, 7, 8};
+        FloatBuffer f = FloatBuffer.wrap(array);
+        ByteBuffer b = ByteBuffer.allocate(8 * 4);
+
+        // copy from float array to
+        temp.readFrom(f, true);
+        temp.writeTo(b, true);
+
+        // test conversion
+        FloatBuffer c = b.asFloatBuffer(); // -- crashes here
+
+        // empty float array
+        for (int i = 0; i < array.length; i ++) {
+            array[i] = 0;
+        }
+
+        // copy back
+        temp.readFrom(c, true);
+        temp.writeTo(f, true);
+
+        System.out.println(Arrays.toString(array));
+
+    }
 
     public static ClearCLBuffer itkToCLIJ(CLIJ2 clij2, Image image) {
         long bytesPerPixel = 0;
