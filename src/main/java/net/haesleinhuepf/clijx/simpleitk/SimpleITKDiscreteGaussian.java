@@ -28,7 +28,7 @@ public class SimpleITKDiscreteGaussian extends AbstractCLIJ2Plugin implements CL
 
     @Override
     public boolean executeCL() {
-        boolean result = runAndCatch(() -> simpleITKDiscreteGaussian(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), asFloat(args[2]), asFloat(args[2]), asFloat(args[2])));
+        boolean result = runAndCatch(() -> simpleITKDiscreteGaussian(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), asFloat(args[2]), asFloat(args[3]), asFloat(args[4])));
         return result;
     }
 
