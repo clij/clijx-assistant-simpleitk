@@ -62,6 +62,6 @@ public class SimpleITKMorphologicalWatershed extends AbstractCLIJ2Plugin impleme
 
     @Override
     public String getCategories() {
-        return "Binary,Filter";
+        return "Filter";
     }
 }
