@@ -15,7 +15,7 @@ import org.scijava.plugin.Plugin;
 import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.*;
 
 @Plugin(type = CLIJMacroPlugin.class, name = "CLIJx_simpleITKBinaryPruning")
-public class SimpleITKBinaryPruning extends AbstractCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
+public class SimpleITKBinaryPruning extends AbstractSimpleITKCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
 {
     @Override
     public String getParameterHelpText() {

@@ -15,7 +15,7 @@ import org.scijava.plugin.Plugin;
 import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.*;
 
 @Plugin(type = CLIJMacroPlugin.class, name = "CLIJx_simpleITKBilateral")
-public class SimpleITKBilateral extends AbstractCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
+public class SimpleITKBilateral extends AbstractSimpleITKCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
 {
     @Override
     public String getParameterHelpText() {
@@ -29,17 +29,17 @@ public class SimpleITKBilateral extends AbstractCLIJ2Plugin implements CLIJMacro
 
     @Override
     public boolean executeCL() {
-        boolean result = runAndCatch(() -> simpleITKBilateral(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), asFloat(args[2]), asFloat(args[3]), asInteger(args[4])));
+        boolean result = runAndCatch(() -> simpleITKBilateral(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), asFloat(args[2]), asFloat(args[3]), asFloat(args[4])));
         return result;
     }
 
-    public static synchronized boolean simpleITKBilateral(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output, Float domainSigma, Float rangeSigma, Integer numberOfRangeGaussianSamples) {
+    public static synchronized boolean simpleITKBilateral(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output, Float domainSigma, Float rangeSigma, Float numberOfRangeGaussianSamples) {
 
         // convert to ITK
         Image itk_input = clijToITK(clij2, input);
 
         // apply SimpleITK Median
-        Image itk_output = SimpleITK.bilateral(itk_input, domainSigma, rangeSigma, numberOfRangeGaussianSamples);
+        Image itk_output = SimpleITK.bilateral(itk_input, domainSigma, rangeSigma, numberOfRangeGaussianSamples.intValue());
 
         // push result back
         ClearCLBuffer result = itkToCLIJ(clij2, itk_output);

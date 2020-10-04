@@ -16,7 +16,7 @@ import org.scijava.plugin.Plugin;
 import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.*;
 
 @Plugin(type = CLIJMacroPlugin.class, name = "CLIJx_simpleITKMedian")
-public class SimpleITKMedian extends AbstractCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
+public class SimpleITKMedian extends AbstractSimpleITKCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
 {
     @Override
     public String getParameterHelpText() {
@@ -25,17 +25,17 @@ public class SimpleITKMedian extends AbstractCLIJ2Plugin implements CLIJMacroPlu
 
     @Override
     public boolean executeCL() {
-        boolean result = runAndCatch(() -> simpleITKMedian(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), asInteger(args[2]), asInteger(args[3]), asInteger(args[4])));
+        boolean result = runAndCatch(() -> simpleITKMedian(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), asFloat(args[2]), asFloat(args[3]), asFloat(args[4])));
         return result;
     }
 
-    public static synchronized boolean simpleITKMedian(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output, Integer radius_x, Integer radius_y, Integer radius_z) {
+    public static synchronized boolean simpleITKMedian(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output, Float radius_x, Float radius_y, Float radius_z) {
 
         // convert to ITK
         Image itk_input = clijToITK(clij2, input);
 
         // apply SimpleITK Median
-        Image itk_output = SimpleITK.median(itk_input, CLIJSimpleITKUtilities.packRadii(radius_x, radius_y, radius_z, (int)input.getDimension()));
+        Image itk_output = SimpleITK.median(itk_input, CLIJSimpleITKUtilities.packRadii(radius_x.intValue(), radius_y.intValue(), radius_z.intValue(), (int)input.getDimension()));
 
         // push result back
         ClearCLBuffer result = itkToCLIJ(clij2, itk_output);

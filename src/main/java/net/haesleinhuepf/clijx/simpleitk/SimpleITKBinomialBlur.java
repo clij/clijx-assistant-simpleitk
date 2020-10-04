@@ -15,7 +15,7 @@ import org.scijava.plugin.Plugin;
 import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.*;
 
 @Plugin(type = CLIJMacroPlugin.class, name = "CLIJx_simpleITKBinomialBlur")
-public class SimpleITKBinomialBlur extends AbstractCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
+public class SimpleITKBinomialBlur extends AbstractSimpleITKCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
 {
     @Override
     public String getParameterHelpText() {
@@ -24,17 +24,17 @@ public class SimpleITKBinomialBlur extends AbstractCLIJ2Plugin implements CLIJMa
 
     @Override
     public boolean executeCL() {
-        boolean result = runAndCatch(() -> simpleITKBinomialBlur(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), asInteger(args[2])));
+        boolean result = runAndCatch(() -> simpleITKBinomialBlur(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), asFloat(args[2])));
         return result;
     }
 
-    public static synchronized boolean simpleITKBinomialBlur(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output, Integer repetitions) {
+    public static synchronized boolean simpleITKBinomialBlur(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output, Float repetitions) {
 
         // convert to ITK
         Image itk_input = clijToITK(clij2, input);
 
         // apply SimpleITK BinomialBlur
-        Image itk_output = SimpleITK.binomialBlur(itk_input, repetitions);
+        Image itk_output = SimpleITK.binomialBlur(itk_input, repetitions.intValue());
 
         // push result back
         ClearCLBuffer result = itkToCLIJ(clij2, itk_output);

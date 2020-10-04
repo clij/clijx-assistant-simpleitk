@@ -17,7 +17,7 @@ import org.scijava.plugin.Plugin;
 import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.*;
 
 @Plugin(type = CLIJMacroPlugin.class, name = "CLIJx_simpleITKRichardsonLucyDeconvolution")
-public class SimpleITKRichardsonLucyDeconvolution extends AbstractCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
+public class SimpleITKRichardsonLucyDeconvolution extends AbstractSimpleITKCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
 {
     @Override
     public String getParameterHelpText() {
@@ -32,11 +32,11 @@ public class SimpleITKRichardsonLucyDeconvolution extends AbstractCLIJ2Plugin im
 
     @Override
     public boolean executeCL() {
-        boolean result = runAndCatch(() -> simpleItkRichardsonLucyDeconvolution(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), (ClearCLBuffer) (args[2]), asInteger(args[3]), asBoolean(args[4])));
+        boolean result = runAndCatch(() -> simpleItkRichardsonLucyDeconvolution(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), (ClearCLBuffer) (args[2]), asFloat(args[3]), asBoolean(args[4])));
         return result;
     }
 
-    public static boolean simpleItkRichardsonLucyDeconvolution(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer input_psf, ClearCLBuffer output, Integer num_iterations, Boolean normalize ) {
+    public static boolean simpleItkRichardsonLucyDeconvolution(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer input_psf, ClearCLBuffer output, Float num_iterations, Boolean normalize ) {
         // convert to ITK
         Image itk_input = clijToITK(clij2, input);
         Image itk_input_psf = clijToITK(clij2, input_psf);
@@ -44,7 +44,7 @@ public class SimpleITKRichardsonLucyDeconvolution extends AbstractCLIJ2Plugin im
         itk_input_psf = SimpleITK.cast(itk_input_psf, PixelIDValueEnum.sitkFloat32);
 
         // apply Simple Richardson Lucy Deconvolution
-        Image itk_output = SimpleITK.richardsonLucyDeconvolution(itk_input, itk_input_psf, num_iterations, normalize);
+        Image itk_output = SimpleITK.richardsonLucyDeconvolution(itk_input, itk_input_psf, num_iterations.intValue(), normalize);
 
         // push result back
         ClearCLBuffer result = itkToCLIJ(clij2, itk_output);

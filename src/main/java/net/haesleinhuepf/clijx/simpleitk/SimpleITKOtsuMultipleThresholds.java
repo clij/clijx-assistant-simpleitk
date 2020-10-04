@@ -13,10 +13,12 @@ import org.itk.simple.PixelIDValueEnum;
 import org.itk.simple.SimpleITK;
 import org.scijava.plugin.Plugin;
 
+import java.nio.FloatBuffer;
+
 import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.*;
 
 @Plugin(type = CLIJMacroPlugin.class, name = "CLIJx_simpleITKOtsuMultipleThresholds")
-public class SimpleITKOtsuMultipleThresholds extends AbstractCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
+public class SimpleITKOtsuMultipleThresholds extends AbstractSimpleITKCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
 {
     @Override
     public String getParameterHelpText() {
@@ -25,11 +27,11 @@ public class SimpleITKOtsuMultipleThresholds extends AbstractCLIJ2Plugin impleme
 
     @Override
     public boolean executeCL() {
-        boolean result = runAndCatch(() -> simpleITKOtsuMultipleThresholds(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), asInteger(args[2])));
+        boolean result = runAndCatch(() -> simpleITKOtsuMultipleThresholds(getCLIJ2(), (ClearCLBuffer) (args[0]), (ClearCLBuffer) (args[1]), asFloat(args[2])));
         return result;
     }
 
-    public static synchronized boolean simpleITKOtsuMultipleThresholds(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output, Integer number_of_thresholds) {
+    public static synchronized boolean simpleITKOtsuMultipleThresholds(CLIJ2 clij2, ClearCLBuffer input, ClearCLBuffer output, Float number_of_thresholds) {
 
         // convert to ITK
         Image itk_input = clijToITK(clij2, input);
