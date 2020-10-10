@@ -9,6 +9,7 @@ import net.haesleinhuepf.clij.macro.CLIJOpenCLProcessor;
 import net.haesleinhuepf.clij.macro.documentation.OffersDocumentation;
 import net.haesleinhuepf.clij2.AbstractCLIJ2Plugin;
 import net.haesleinhuepf.clij2.CLIJ2;
+import net.haesleinhuepf.clij2.utilities.HasClassifiedInputOutput;
 import net.haesleinhuepf.clij2.utilities.IsCategorized;
 import org.itk.simple.Image;
 import org.itk.simple.SimpleITK;
@@ -19,8 +20,17 @@ import java.io.File;
 import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.*;
 
 @Plugin(type = CLIJMacroPlugin.class, name = "CLIJx_simpleITKDiscreteGaussian")
-public class SimpleITKDiscreteGaussian extends AbstractSimpleITKCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized
-{
+public class SimpleITKDiscreteGaussian extends AbstractSimpleITKCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, IsCategorized, HasClassifiedInputOutput {
+    @Override
+    public String getInputType() {
+        return "Image";
+    }
+
+    @Override
+    public String getOutputType() {
+        return "Image";
+    }
+
     @Override
     public String getParameterHelpText() {
         return "Image input, ByRef Image destination, Number sigma_x, Number sigma_y, Number sigma_z";

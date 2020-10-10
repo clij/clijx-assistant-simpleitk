@@ -8,6 +8,7 @@ import net.haesleinhuepf.clij.macro.CLIJOpenCLProcessor;
 import net.haesleinhuepf.clij.macro.documentation.OffersDocumentation;
 import net.haesleinhuepf.clij2.AbstractCLIJ2Plugin;
 import net.haesleinhuepf.clij2.CLIJ2;
+import net.haesleinhuepf.clij2.utilities.HasClassifiedInputOutput;
 import net.haesleinhuepf.clij2.utilities.IsCategorized;
 import org.itk.simple.Image;
 import org.itk.simple.SimpleITK;
@@ -16,8 +17,17 @@ import org.scijava.plugin.Plugin;
 import static net.haesleinhuepf.clijx.simpleitk.CLIJSimpleITKUtilities.*;
 
 @Plugin(type = CLIJMacroPlugin.class, name = "CLIJx_convertToFloat")
-public class ConvertToFloat extends AbstractCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation
-{
+public class ConvertToFloat extends AbstractCLIJ2Plugin implements CLIJMacroPlugin, CLIJOpenCLProcessor, OffersDocumentation, HasClassifiedInputOutput {
+    @Override
+    public String getInputType() {
+        return "Image";
+    }
+
+    @Override
+    public String getOutputType() {
+        return "Image";
+    }
+
     @Override
     public String getParameterHelpText() {
         return "Image input, ByRef Image destination";
