@@ -1,90 +1,55 @@
 package net.haesleinhuepf.clijx.simpleitk;
 
-import ij.IJ;
-import ij.ImagePlus;
 import net.haesleinhuepf.clij.clearcl.ClearCLBuffer;
-import net.haesleinhuepf.clij.clearcl.ClearCLHostImageBuffer;
-import net.haesleinhuepf.clij.coremem.ContiguousMemoryInterface;
 import net.haesleinhuepf.clij.coremem.enums.NativeTypeEnum;
-import net.haesleinhuepf.clij.coremem.interop.JNAInterop;
-import net.haesleinhuepf.clij.coremem.interop.NIOBuffersInterop;
-import net.haesleinhuepf.clij.coremem.offheap.OffHeapMemory;
 import net.haesleinhuepf.clij2.CLIJ2;
 import org.itk.simple.*;
 
+import java.nio.Buffer;
+
 public class CLIJSimpleITKUtilities {
+    public static Image clijToITK(CLIJ2 clij2, ClearCLBuffer cl_buffer) {
+        Image itk_image = null;
 
-    // workaround classes
-    static class SWIG_FLOAT extends SWIGTYPE_p_float{
-        public static long getPointer(SWIGTYPE_p_float t) {
-            return SWIGTYPE_p_float.getCPtr(t);
-        }
-    }
-
-    static class SWIG_USHORT extends SWIGTYPE_p_unsigned_short{
-        public static long getPointer(SWIGTYPE_p_unsigned_short t) {
-            return SWIGTYPE_p_unsigned_short.getCPtr(t);
-        }
-    }
-
-    static class SWIG_UBYTE extends SWIGTYPE_p_unsigned_char{
-        public static long getPointer(SWIGTYPE_p_unsigned_char t) {
-            return SWIGTYPE_p_unsigned_char.getCPtr(t);
-        }
-    }
-
-
-    public static Image clijToITK(CLIJ2 clij2, ClearCLBuffer input) {
-        long bytesPerPixel = 0;
-        long length = input.getWidth() * input.getHeight() * input.getDepth();
-        Image image = null;
-        long pointer = 0;
+        Buffer float_buffer = null;
 
         // create output image depending on type and retrieve pointer
-        if (input.getNativeType() == NativeTypeEnum.Float) {
-            bytesPerPixel = 4;
-            if (input.getDimension() == 3) {
-                image = new Image(input.getWidth(), input.getHeight(), input.getDepth(), PixelIDValueEnum.sitkFloat32);
+        if (cl_buffer.getNativeType() == NativeTypeEnum.Float) {
+            if (cl_buffer.getDimension() == 3) {
+                itk_image = new Image(cl_buffer.getWidth(), cl_buffer.getHeight(), cl_buffer.getDepth(), PixelIDValueEnum.sitkFloat32);
             } else {
-                image = new Image(input.getWidth(), input.getHeight(), PixelIDValueEnum.sitkFloat32);
+                itk_image = new Image(cl_buffer.getWidth(), cl_buffer.getHeight(), PixelIDValueEnum.sitkFloat32);
             }
 
-            SWIGTYPE_p_float bufferAsFloat = image.getBufferAsFloat();
-            pointer = SWIG_FLOAT.getPointer(bufferAsFloat);
-        } else
-        if (input.getNativeType() == NativeTypeEnum.UnsignedShort) {
-            bytesPerPixel = 2;
-            if (input.getDimension() == 3) {
-                image = new Image(input.getWidth(), input.getHeight(), input.getDepth(), PixelIDValueEnum.sitkUInt16);
+            float_buffer = itk_image.getBufferAsByteBuffer().asFloatBuffer();
+        } else if (cl_buffer.getNativeType() == NativeTypeEnum.UnsignedShort) {
+            if (cl_buffer.getDimension() == 3) {
+                itk_image = new Image(cl_buffer.getWidth(), cl_buffer.getHeight(), cl_buffer.getDepth(), PixelIDValueEnum.sitkUInt16);
             } else {
-                image = new Image(input.getWidth(), input.getHeight(), PixelIDValueEnum.sitkUInt16);
+                itk_image = new Image(cl_buffer.getWidth(), cl_buffer.getHeight(), PixelIDValueEnum.sitkUInt16);
             }
 
-            SWIGTYPE_p_unsigned_short bufferAsUInt16 = image.getBufferAsUInt16();
-            pointer = SWIG_USHORT.getPointer(bufferAsUInt16);
-        } else if (input.getNativeType() == NativeTypeEnum.UnsignedByte) {
-            bytesPerPixel = 1;
-            if (input.getDimension() == 3) {
-                image = new Image(input.getWidth(), input.getHeight(), input.getDepth(), PixelIDValueEnum.sitkUInt8);
+            float_buffer = itk_image.getBufferAsByteBuffer().asCharBuffer();
+        } else if (cl_buffer.getNativeType() == NativeTypeEnum.UnsignedByte) {
+            if (cl_buffer.getDimension() == 3) {
+                itk_image = new Image(cl_buffer.getWidth(), cl_buffer.getHeight(), cl_buffer.getDepth(), PixelIDValueEnum.sitkUInt8);
             } else {
-                image = new Image(input.getWidth(), input.getHeight(), PixelIDValueEnum.sitkUInt8);
+                itk_image = new Image(cl_buffer.getWidth(), cl_buffer.getHeight(), PixelIDValueEnum.sitkUInt8);
             }
 
-            SWIGTYPE_p_unsigned_char bufferAsUInt8 = image.getBufferAsUInt8();
-            pointer = SWIG_UBYTE.getPointer(bufferAsUInt8);
+            float_buffer = itk_image.getBufferAsByteBuffer();
         } else {
-            System.out.println("Warning: CLIJ Type not (yet) supported. Converting to Float instead: " + input.getNativeType());
-            ClearCLBuffer temp = clij2.create(input.getDimensions(), NativeTypeEnum.Float);
-            clij2.copy(input, temp);
-            image = clijToITK(clij2, temp);
+            System.out.println("Warning: CLIJ Type not (yet) supported. Converting to Float instead: " + cl_buffer.getNativeType());
+            ClearCLBuffer temp = clij2.create(cl_buffer.getDimensions(), NativeTypeEnum.Float);
+            clij2.copy(cl_buffer, temp);
+            itk_image = clijToITK(clij2, temp);
             temp.close();
-            return image;
+            return itk_image;
         }
 
         // copy pixels
-        OffHeapMemory offHeapMemory = OffHeapMemory.wrapPointer(JNAInterop.getJNAPointer(pointer), length * bytesPerPixel);
-        input.writeTo(offHeapMemory, true);
-        return image;
+        cl_buffer.writeTo(float_buffer, true);
+        return itk_image;
     }
 
     public static ClearCLBuffer convertFloat(CLIJ2 clij2, ClearCLBuffer input) {
@@ -97,44 +62,30 @@ public class CLIJSimpleITKUtilities {
     }
 
 
-    public static ClearCLBuffer itkToCLIJ(CLIJ2 clij2, Image image) {
-        long bytesPerPixel = 0;
-
+    public static ClearCLBuffer itkToCLIJ(CLIJ2 clij2, Image itk_image) {
         // determine memory size
-        long length = image.getWidth() * image.getHeight();
-        if (image.getDimension() == 3) {
-            length = length * image.getDepth();
-        }
-
-        ClearCLBuffer buffer = null;
-        long pointer = 0;
+        ClearCLBuffer cl_buffer = null;
+        Buffer float_buffer = null;
 
         // create output image depending on type; retrieve pointer
-        if (image.getPixelID() == PixelIDValueEnum.sitkFloat32) {
-            bytesPerPixel = 4;
-            buffer = clij2.create(getDimensions(image), clij2.Float);
-            SWIGTYPE_p_float bufferAsFloat = image.getBufferAsFloat();
-            pointer = SWIG_FLOAT.getPointer(bufferAsFloat);
-        } else if (image.getPixelID() == PixelIDValueEnum.sitkUInt16) {
-            bytesPerPixel = 2;
-            buffer = clij2.create(getDimensions(image), clij2.UnsignedShort);
-            SWIGTYPE_p_unsigned_short bufferAsUInt16 = image.getBufferAsUInt16();
-            pointer = SWIG_USHORT.getPointer(bufferAsUInt16);
-        } else if (image.getPixelID() == PixelIDValueEnum.sitkUInt8) {
-            bytesPerPixel = 1;
-            buffer = clij2.create(getDimensions(image), clij2.UnsignedByte);
-            SWIGTYPE_p_unsigned_char bufferAsUInt8 = image.getBufferAsUInt8();
-            pointer = SWIG_UBYTE.getPointer(bufferAsUInt8);
+        if (itk_image.getPixelID() == PixelIDValueEnum.sitkFloat32) {
+            cl_buffer = clij2.create(getDimensions(itk_image), clij2.Float);
+            float_buffer = itk_image.getBufferAsByteBuffer().asFloatBuffer();
+        } else if (itk_image.getPixelID() == PixelIDValueEnum.sitkUInt16) {
+            cl_buffer = clij2.create(getDimensions(itk_image), clij2.UnsignedShort);
+            float_buffer = itk_image.getBufferAsByteBuffer().asCharBuffer();
+        } else if (itk_image.getPixelID() == PixelIDValueEnum.sitkUInt8) {
+            cl_buffer = clij2.create(getDimensions(itk_image), clij2.UnsignedByte);
+            float_buffer = itk_image.getBufferAsByteBuffer();
         } else {
-            System.out.println("Warning: ITK Type not (yet) supported. Converting to Float instead: " + image.getPixelID());
-            Image temp = SimpleITK.cast(image, PixelIDValueEnum.sitkFloat32);
+            System.out.println("Warning: ITK Type not (yet) supported. Converting to Float instead: " + itk_image.getPixelID());
+            Image temp = SimpleITK.cast(itk_image, PixelIDValueEnum.sitkFloat32);
             return itkToCLIJ(clij2, temp);
         }
 
         // copy pixels
-        OffHeapMemory offHeapMemory = OffHeapMemory.wrapPointer(JNAInterop.getJNAPointer(pointer), length * bytesPerPixel);
-        buffer.readFrom(offHeapMemory, true);
-        return buffer;
+        cl_buffer.readFrom(float_buffer, true);
+        return cl_buffer;
     }
 
     private static long[] getDimensions(Image image) {
