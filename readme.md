@@ -6,7 +6,8 @@ This repository bridges [SimpleITK](https://simpleitk.org/) and [clij](https://c
 This is preliminary right now.
 
 ## Installation in Fiji
-Follow the installation instructions [here](https://clij.github.io/assistant/installation).
+Follow the installation instructions [here](https://clij.github.io/assistant/installation#extensions). 
+At the moment, only Windows and MacOS are supported.
 
 ## How to build
 Download the Simple-ITK-Java package of your operating system from [here](https://github.com/SimpleITK/SimpleITK/releases),
