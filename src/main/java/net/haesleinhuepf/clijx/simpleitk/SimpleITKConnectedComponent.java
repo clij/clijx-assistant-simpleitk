@@ -79,4 +79,10 @@ public class SimpleITKConnectedComponent extends AbstractSimpleITKCLIJ2Plugin im
     public String getCategories() {
         return "Labeling";
     }
+    
+    
+    @Override
+    public ClearCLBuffer createOutputBufferFromSource(ClearCLBuffer input) {
+        return clij.create(input.getDimensions(), NativeTypeEnum.Float);
+    }
 }
